@@ -24,4 +24,14 @@ describe('Kata - Harry Potter Book', () => {
     potter.addToBasket([1, 1, 1]);
     expect(potter.price).toBe(8 * 3);
   });
+  test('testBasics: buy one book', () => {
+    potter.addToBasket([0, 1]);
+    expect(potter.price).toBe(8 * 2 * 0.95);
+    potter.addToBasket([0, 2, 4]);
+    expect(potter.price).toBe(8 * 3 * 0.9);
+    potter.addToBasket([0, 1, 2, 4]);
+    expect(potter.price).toBe(8 * 4 * 0.8);
+    potter.addToBasket([0, 1, 2, 3, 4]);
+    expect(potter.price).toBe(8 * 5 * 0.75);
+  });
 });
