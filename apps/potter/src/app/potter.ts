@@ -6,36 +6,43 @@ export class Potter {
             this._basket.push(book[i]);
     }
     get price() {
-        let price = 0;
+        let price = 8;
+        let discount = [1, 1, 0.95, 0.9, 0.8, 0.75];
         let totalBookNumber = 0;
-        let distunctBookNumber = 0;
+        let distinctBookNumber = 0;
 
         totalBookNumber = this._basket.length;
-        const distinctBasket = this._basket.filter((ele , pos) => {
-            return this._basket.indexOf(ele) == pos;
-        });
-        distunctBookNumber = distinctBasket.length;
 
-        if (distunctBookNumber == 1) {
-            price = 8 * totalBookNumber;
+        // 取得不重複的購物籃
+        const distinctBasket = this.distinctBasket;
+        // 取得不重複購物籃的數量
+        distinctBookNumber = distinctBasket.length;
+
+        if (distinctBookNumber == 1) {
+            price *= totalBookNumber;
         } else {
             switch (totalBookNumber) {
                 case 2:
-                    price = 8 * 2 * 0.95;
+                    price *= 2 * discount[2];
                     break;
                 case 3:
-                    price = 8 * 3 * 0.9;
+                    price *= 3 * discount[3];
                     break;
                 case 4:
-                    price = 8 * 4 * 0.8;
+                    price *= 4 * discount[4];
                     break;
                 case 5:
-                    price = 8 * 5 * 0.75;
+                    price *= 5 * discount[5];
                     break;
                 default:
-                    break;
+                    price = 0;
             }
         }
         return price;
+    }
+
+    get distinctBasket () {
+        const distinctBasket = [...(new Set(this._basket))];
+        return distinctBasket;
     }
 }
