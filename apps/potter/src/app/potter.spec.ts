@@ -6,17 +6,22 @@ describe('Kata - Harry Potter Book', () => {
   });
 
   test('testBasics: buy one book', () => {
-    const potter = new Potter();
+    let potter = new Potter();
     potter.addToBasket([]);
     expect(potter.price).toBe(0);
+    potter = new Potter();
     potter.addToBasket([1]);
     expect(potter.price).toBe(8);
+    potter = new Potter();
     potter.addToBasket([2]);
     expect(potter.price).toBe(8);
+    potter = new Potter();
     potter.addToBasket([3]);
     expect(potter.price).toBe(8);
+    potter = new Potter();
     potter.addToBasket([4]);
     expect(potter.price).toBe(8);
+    potter = new Potter();
     potter.addToBasket([1, 1, 1]);
     expect(potter.price).toBe(8 * 3);
   });
