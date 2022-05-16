@@ -21,6 +21,7 @@ export class Potter {
         let distinctBookNumber = 0;
 
         while (this.totalBookNumber > 0) {
+            // 檢查是否有 5 3 情況，若有則將其改為 4 4
             if (this.checkOptimalPrice()) {
                 price += 2 * 8 * 4 * discount[4];
             } else {
