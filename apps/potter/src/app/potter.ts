@@ -1,53 +1,75 @@
 export class Potter {
     private _basket: number[] = [];
+    totalBookNumber = 0;
     addToBasket(book: number[]) {
         this._basket = [];
-        book.forEach(e => this._basket.push(e));
+        for (let i = 0; i < book.length; i++) {
+            this._basket.push(book[i]);
+        }
     }
     get price() {
         let price = 0;
         const discount = [1, 1, 0.95, 0.9, 0.8, 0.75];
-        let totalBookNumber = 0;
         // 取得不重複的購物籃
-        let distinctBasket = [];
+        let distinctBasket:number[] = [];
         let distinctBookNumber = 0;
-        let index = [];
 
-        totalBookNumber = this._basket.length;
+        this.totalBookNumber = this._basket.length;
 
-        while (totalBookNumber > 0) {
-            // 取得不重複的購物籃
-            distinctBasket = this.distinctBasket;
-            // 取得不重複購物籃的數量
-            distinctBookNumber = distinctBasket.length;
-            switch (distinctBookNumber) {
-                case 1:
-                    price += 8 * distinctBookNumber;
-                    break;
-                case 2:
-                    price += 8 * 2 * discount[2];
-                    break;
-                case 3:
-                    price += 8 * 3 * discount[3];
-                    break;
-                case 4:
-                    price += 8 * 4 * discount[4];
-                    break;
-                case 5:
-                    price += 8 * 5 * discount[5];
-                    break;
-                default:
-                    price = 0;
+        while (this.totalBookNumber > 0) {
+            if (this.checkOptimalPrice()) {
+                price += 2 * 8 * 4 * discount[4];
+            } else {
+                // 取得不重複的購物籃
+                distinctBasket = [...(new Set(this._basket))];
+                // 取得不重複購物籃的數量
+                distinctBookNumber = distinctBasket.length;
+                price += 8 * distinctBookNumber * discount[distinctBookNumber];
+                for (let i = 0; i < distinctBookNumber; i++) {
+                    this._basket.splice(this._basket.indexOf(distinctBasket[i]), 1);
+                }
+                this.totalBookNumber -= distinctBookNumber;
             }
-            index = distinctBasket.filter(e => this._basket.indexOf(e));
-            index.forEach(e => this._basket.splice(e, distinctBookNumber));
-            totalBookNumber -= distinctBookNumber;
         }
         return price;
     }
 
-    get distinctBasket () {
-        const distinctBasket = [...(new Set(this._basket))];
-        return distinctBasket;
+    checkOptimalPrice () {
+        if (this.totalBookNumber < 8) return false;
+        let temp_basket: number[] = [];
+        let distinctBasket1: number[] = [];
+        let distinctBasket2: number[] = [];
+        let distinctBookNumberThis = 0;
+        let distinctBookNumberNext = 0;
+        temp_basket = this._basket;
+
+        distinctBasket1 = [...(new Set(temp_basket))];
+        distinctBookNumberThis = distinctBasket1.length;
+        for (let i = 0; i < distinctBookNumberThis; i++) {
+            temp_basket.splice(temp_basket.indexOf(distinctBasket1[i]), 1);
+        }
+        distinctBasket2 = [...(new Set(temp_basket))];
+        distinctBookNumberNext = distinctBasket2.length;
+        for (let i = 0; i < distinctBookNumberThis; i++) {
+            temp_basket.push(distinctBasket1[i]);
+        }
+
+        if (distinctBookNumberThis == 5 && distinctBookNumberNext == 3) {
+            distinctBasket1 = [...(new Set(this._basket))];
+            distinctBookNumberThis = distinctBasket1.length;
+            for (let i = 0; i < distinctBookNumberThis; i++) {
+                this._basket.splice(this._basket.indexOf(distinctBasket1[i]), 1);
+            }
+            this.totalBookNumber -= distinctBookNumberThis;
+            distinctBasket2 = [...(new Set(this._basket))];
+            distinctBookNumberNext = distinctBasket2.length;
+            for (let i = 0; i < distinctBookNumberNext; i++) {
+                this._basket.splice(this._basket.indexOf(distinctBasket2[i]), 1);
+            }
+            this.totalBookNumber -= distinctBookNumberNext;
+            return true;
+        } else {
+            return false;
+        }
     }
 }
